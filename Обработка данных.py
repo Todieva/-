@@ -1,3 +1,46 @@
+import sqlite3
+import pandas as pd
+
+# Загрузить файл Excel
+df = pd.read_excel('/content/Database/Рассеянный склероз_ДСМ.xlsx')
+
+# Подключиться к базе данных SQLite
+conn = sqlite3.connect('/content/Database/database.sqlite3')
+c = conn.cursor()
+
+# Создать таблицу для хранения данных Excel
+c.execute( '''CREATE TABLE IF NOT EXISTS analytics(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      Тип товара TEXT,
+      Полное наименование TEXT,
+      МНН TEXT,
+      Лекарственная форма TEXT,
+      Бренд TEXT,
+      Фирма_производитель TEXT,
+      Корпорация TEXT,
+      Фармакотерапевтическая группа TEXT,
+      АТС1 TEXT,
+      АТС2 TEXT,
+      АТС3 TEXT,
+      АТС4 TEXT,
+      АТС5 TEXT,
+      Ephmra1 TEXT,
+      Ephmra2 TEXT,
+      Ephmra3 TEXT,
+      Ephmra4 TEXT,
+      Год INTEGER,
+      Месяц INTEGER,
+      Объем1 INTEGER,
+      Объем2 INTEGER,
+      Объем3 INTEGER)''')
+
+# Вставить данные из DataFrame в таблицу
+df.to_sql('analytics', conn, if_exists='replace', index=True)
+
+# Зафиксировать изменения 
+conn.commit()
+
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
